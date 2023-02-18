@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class BookController {
     @GetMapping("/api/books")
-    public void listResource(@RequestParam(required = false)) {
+    public void listResource(@RequestParam(required = false)) String bookName{
         System.out.println("List Resource.");
     }
 
