@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CategoryController {
     @GetMapping("/api/categories")
-    public void listCategory(@RequestParam(required = false)){
+    public void listCategory(@RequestParam(required = false) String name){
         System.out.println("Search category called.");
     }
 
