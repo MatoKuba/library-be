@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class BookController {
     @GetMapping("/api/books")
-    public void listResource(@RequestParam(required = false)String bookName){
+    public void listResource(@RequestParam(required = false)) String bookName{
         System.out.println("List Resource.");
     }
 
@@ -25,7 +25,7 @@ public class BookController {
     }
 
     @DeleteMapping("/api/books/{bookId}")
-    public void deleteBook(@PathVariable Long bookId) {
+    public void deleteCustomer(@PathVariable Long bookId) {
         System.out.println("Delete book called: ID = " + bookId);
     }
 }
