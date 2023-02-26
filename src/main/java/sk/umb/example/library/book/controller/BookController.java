@@ -7,7 +7,9 @@ public class BookController {
     @GetMapping("/api/books")
     public void listResource(@RequestParam(required = false, name = "paramName") String paramValue) {
         System.out.println("List Resource with parameter: " + paramValue);
+
     }
+
 
     @GetMapping("/api/books/{bookId}")
     public void retrieveDetail(@PathVariable Long bookId) {
