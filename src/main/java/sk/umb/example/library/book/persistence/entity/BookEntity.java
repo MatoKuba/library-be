@@ -6,17 +6,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import sk.umb.example.library.address.persistence.entity.AddressEntity;
 
-@Entity(name = "customer")
-public class CustomerEntity {
+@Entity(name = "book")
+public class BookEntity {
     @Id
     @GeneratedValue
     private Long id;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String emailContact;
 
     @ManyToOne
     private AddressEntity address;
@@ -37,27 +32,4 @@ public class CustomerEntity {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmailContact() {
-        return emailContact;
-    }
-
-    public void setEmailContact(String emailContact) {
-        this.emailContact = emailContact;
-    }
 }
