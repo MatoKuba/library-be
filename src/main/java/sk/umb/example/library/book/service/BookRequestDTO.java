@@ -10,6 +10,16 @@ public class BookRequestDTO {
 
     private int count;
 
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
+    }
+
+    private Long addressId;
+
     public String getAuthorFirstName() {
         return authorFirstName;
     }
@@ -49,4 +59,5 @@ public class BookRequestDTO {
     public int getCount() {
         return count;
     }
+
 }

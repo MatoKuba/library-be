@@ -3,7 +3,8 @@ package sk.umb.example.library.borrowing.persistence.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-
+import sk.umb.example.library.customer.persistence.entity.CustomerEntity;
+import sk.umb.example.library.book.persistence.entity.BookEntity;
 import java.util.Date;
 
 @Entity(name = "borrowing")
