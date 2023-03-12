@@ -1,31 +1,50 @@
 package sk.umb.example.library.customer.controller;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.bind.annotation.*;
+import sk.umb.example.library.customer.service.CustomerRequestDto;
+import sk.umb.example.library.customer.service.CustomerDetailDto;
+import sk.umb.example.library.customer.service.CustomerService;
+
+import java.util.List;
 
 @RestController
 public class CustomerController {
+    private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
     @GetMapping("/api/customers")
-    public void searchCustomer(@RequestParam(required = false) String lastName) {
-        System.out.println("Search customer called.");
+    public List<CustomerDetailDto> searchCustomer(@RequestParam(required = false) String lastName) {
+        System.out.println("Search customer called twice.");
+
+        return Strings.isEmpty(lastName) ? customerService.getAllCustomers()
+                                         : customerService.searchCustomerByLastName(lastName);
     }
 
     @GetMapping("/api/customers/{customerId}")
-    public void getCustomer(@PathVariable Long customerId) {
+    public CustomerDetailDto getCustomer(@PathVariable Long customerId) {
         System.out.println("Get customer called.");
+        return customerService.getCustomerById(customerId);
     }
 
     @PostMapping("/api/customers")
-    public void createCustomer() {
+    public Long createCustomer(@RequestBody CustomerRequestDto customerRequestDTO) {
         System.out.println("Create customer called:");
+        return customerService.createCustomer(customerRequestDTO);
     }
 
     @PutMapping("/api/customers/{customerId}")
-    public void updateCustomer(@PathVariable Long customerId) {
+    public void updateCustomer(@PathVariable Long customerId, @RequestBody CustomerRequestDto customerRequestDTO) {
         System.out.println("Update customer called: ID = " + customerId);
+        customerService.updateCustomer(customerId, customerRequestDTO);
     }
 
     @DeleteMapping("/api/customers/{customerId}")
     public void deleteCustomer(@PathVariable Long customerId) {
         System.out.println("Delete customer called: ID = " + customerId);
+        customerService.deleteCustomer(customerId);
     }
 }
