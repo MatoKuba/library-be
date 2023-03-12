@@ -1,5 +1,7 @@
 package sk.umb.example.library.book.service;
 
+import sk.umb.example.library.address.service.AddressDetailDto;
+
 public class BookDetailDTO {
     private Long id;
     private String authorFirstName;
@@ -12,6 +14,16 @@ public class BookDetailDTO {
     private int count;
 
     private Long categoryIds;
+
+    public AddressDetailDto getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDetailDto address) {
+        this.address = address;
+    }
+
+    private AddressDetailDto address;
 
     public Long getId() {
         return id;
