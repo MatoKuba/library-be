@@ -6,7 +6,7 @@ public class BookRequestDTO {
 
     private String title;
 
-    private int isbn;
+    private String isbn;
 
     private int count;
 
@@ -44,11 +44,11 @@ public class BookRequestDTO {
         this.title = Title;
     }
 
-    public void setIsbn(int ISBN) {
+    public void setIsbn(String ISBN) {
         this.isbn = ISBN;
     }
 
-    public int getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
