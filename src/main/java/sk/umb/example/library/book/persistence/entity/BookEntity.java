@@ -16,7 +16,7 @@ public class BookEntity {
 
     private String title;
 
-    private int isbn;
+    private String isbn;
 
     private int count;
 
@@ -70,11 +70,11 @@ public class BookEntity {
         this.title = Title;
     }
 
-    public int getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(int isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 

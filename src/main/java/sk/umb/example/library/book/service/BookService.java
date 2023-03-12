@@ -59,6 +59,12 @@ public class BookService {
         if (! Strings.isEmpty(bookRequestDTO.getTitle())) {
             book.setTitle(bookRequestDTO.getTitle());
         }
+        if (! Strings.isEmpty(bookRequestDTO.getIsbn())) {
+            book.setIsbn(bookRequestDTO.getIsbn());
+        }
+        if (bookRequestDTO.getCount() != 0) {
+            book.setCount(bookRequestDTO.getCount());
+        }
 
         bookRepository.save(book);
     }
@@ -92,6 +98,8 @@ public class BookService {
         book.setAuthorLastName(dto.getAuthorLastName());
         book.setAuthorFirstName(dto.getAuthorFirstName());
         book.setTitle(dto.getTitle());
+        book.setIsbn(dto.getIsbn());
+        book.setCount(dto.getCount());
 
         return book;
     }
@@ -113,6 +121,8 @@ public class BookService {
         dto.setAuthorFirstName(bookEntity.getAuthorFirstName());
         dto.setAuthorLastName(bookEntity.getAuthorLastName());
         dto.setTitle(bookEntity.getTitle());
+        dto.setIsbn(bookEntity.getIsbn());
+        dto.setCount(bookEntity.getCount());
 
         return dto;
     }
