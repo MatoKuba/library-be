@@ -2,6 +2,9 @@ package sk.umb.example.library.category.service;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
+import sk.umb.example.library.address.persistence.repository.AddressRepository;
+import sk.umb.example.library.book.persistence.repository.BookRepository;
+import sk.umb.example.library.category.persistence.repository.CategoryRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +14,15 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class CategoryService {
+
+    private final CategoryRepository categoryRepository;
+    private final AddressRepository addressRepository;
+
+    public CategoryService(CategoryRepository categoryRepository,
+                       AddressRepository addressRepository) {
+        this.categoryRepository = categoryRepository;
+        this.addressRepository = addressRepository;
+    }
     private final AtomicLong lastIndex = new AtomicLong(0);
 
     private final Map<Long, CategoryDetailDTO> categoryDatabase = new HashMap();
