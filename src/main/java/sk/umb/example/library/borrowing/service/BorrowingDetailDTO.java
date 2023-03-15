@@ -1,12 +1,12 @@
 package sk.umb.example.library.borrowing.service;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class BorrowingDetailDTO {
     private Long id;
     private String BookDetailDTO;
     private String CustomerDetailDTO;
-    private Date date;
+    private LocalDate date;
 
     public Long getId() {
         return id;
@@ -32,11 +32,11 @@ public class BorrowingDetailDTO {
         CustomerDetailDTO = customerDetailDTO;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }

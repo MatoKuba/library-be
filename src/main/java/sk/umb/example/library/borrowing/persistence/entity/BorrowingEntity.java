@@ -5,7 +5,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import sk.umb.example.library.customer.persistence.entity.CustomerEntity;
 import sk.umb.example.library.book.persistence.entity.BookEntity;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 @Entity(name = "borrowing")
 public class BorrowingEntity {
@@ -13,7 +14,7 @@ public class BorrowingEntity {
     private Long id;
     private String BookDetailDTO;
     private String CustomerDetailDTO;
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     private CustomerEntity customer;
@@ -53,11 +54,11 @@ public class BorrowingEntity {
         CustomerDetailDTO = customerDetailDTO;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

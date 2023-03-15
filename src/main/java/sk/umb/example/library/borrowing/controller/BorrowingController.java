@@ -20,8 +20,8 @@ public class BorrowingController {
     }
 
     @PutMapping("/api/borrowings/{borrwoingId}")
-    public void updateResource(@PathVariable Long customerId) {
-        System.out.println("Update customer called: ID = " + customerId);
+    public void updateResource(@PathVariable Long borrwoingId) {
+        System.out.println("Update customer called: ID = " + borrwoingId);
     }
 
     @DeleteMapping("/api/borrowings/{borrowingId}")
