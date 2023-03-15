@@ -1,15 +1,19 @@
 package sk.umb.example.library.category.service;
 
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
+import sk.umb.example.library.address.persistence.entity.AddressEntity;
 import sk.umb.example.library.address.persistence.repository.AddressRepository;
+import sk.umb.example.library.address.service.AddressDetailDto;
+import sk.umb.example.library.book.persistence.entity.BookEntity;
 import sk.umb.example.library.book.persistence.repository.BookRepository;
+import sk.umb.example.library.book.service.BookDetailDTO;
+import sk.umb.example.library.book.service.BookRequestDTO;
+import sk.umb.example.library.category.persistence.entity.CategoryEntity;
 import sk.umb.example.library.category.persistence.repository.CategoryRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
@@ -28,56 +32,95 @@ public class CategoryService {
     private final Map<Long, CategoryDetailDTO> categoryDatabase = new HashMap();
 
     public List<CategoryDetailDTO> getAllCategories() {
-        return new ArrayList<>(categoryDatabase.values());
+        return mapToDtoList(categoryRepository.findAll());
     }
 
     public List<CategoryDetailDTO> searchCategoryByName(String name) {
-        return categoryDatabase.values().stream()
-                .filter(dto -> name.equals(dto.getName()))
-                .toList();
+        return mapToDtoList(categoryRepository.findCategoryByName(name));
     }
 
     public CategoryDetailDTO getCategoryById(Long categoryId) {
-        validateCategoryExists(categoryId);
-
-        return categoryDatabase.get(categoryId);
+        return mapToDto(getCategoryEntityById(categoryId));
     }
 
+    @Transactional
     public Long createCategory(CategoryRequestDTO categoryRequestDTO) {
-        CategoryDetailDTO categoryDetailDTO = mapToCategoryDetailDTO(lastIndex.getAndIncrement(),
-                categoryRequestDTO);
+        CategoryEntity entity = mapToEntity(categoryRequestDTO);
 
-        categoryDatabase.put(categoryDetailDTO.getId(), categoryDetailDTO);
-
-        return categoryDetailDTO.getId();
+        return categoryRepository.save(entity).getId();
     }
 
-    private static CategoryDetailDTO mapToCategoryDetailDTO(Long index, CategoryRequestDTO categoryRequestDTO) {
-        CategoryDetailDTO dto = new CategoryDetailDTO();
+    @Transactional
+    public void updateCategory(Long categoryId, CategoryRequestDTO categoryRequestDTO) {
+        CategoryEntity category = getCategoryEntityById(categoryId);
 
-        dto.setId(index);
-        dto.setName(categoryRequestDTO.getName());
+        if (! Strings.isEmpty(categoryRequestDTO.getName())) {
+            category.setName(categoryRequestDTO.getName());
+        }
+
+        categoryRepository.save(category);
+    }
+
+    public void deleteCategory(Long categoryId) {
+        categoryRepository.deleteById(categoryId);
+    }
+    private CategoryDetailDTO mapToDto(CategoryEntity categoryEntity) {
+        CategoryDetailDTO dto = new CategoryDetailDTO();
+        dto.setId(categoryEntity.getId());
+        dto.setName(categoryEntity.getName());
+
+        return dto;
+    }
+    private CategoryEntity getCategoryEntityById(Long categoryId) {
+        Optional<CategoryEntity> category = categoryRepository.findById(categoryId);
+
+        if (category.isEmpty()) {
+            throw new IllegalArgumentException("category not found. ID: " + categoryId);
+        }
+
+        return category.get();
+    }
+
+    private CategoryEntity mapToEntity(CategoryRequestDTO dto) {
+        CategoryEntity category = new CategoryEntity();
+
+        if ( ! Objects.isNull(dto.getAddressId()) ) {
+            Optional<AddressEntity> address = addressRepository.findById(dto.getAddressId());
+
+            if (address.isPresent()) {
+                category.setAddress(address.get());
+            }
+        }
+
+        category.setName(dto.getName());
+
+        return category;
+    }
+
+    private List<CategoryDetailDTO> mapToDtoList(Iterable<CategoryEntity> categoryEntities) {
+        List<CategoryDetailDTO> categories = new ArrayList<>();
+
+        categoryEntities.forEach(categoryEntity -> {
+            CategoryDetailDTO dto = mapToDto(categoryEntity);
+            categories.add(dto);
+        });
+
+        return categories;
+    }
+
+    private CategoryDetailDTO mapToCategoryDetailDTO(CategoryEntity categoryEntity) {
+        CategoryDetailDTO dto = new CategoryDetailDTO();
+        dto.setId(categoryEntity.getId());
+        dto.setName(categoryEntity.getName());
 
         return dto;
     }
 
-    public void updateCategory(Long categoryId, CategoryRequestDTO categoryRequestDTO) {
-        validateCategoryExists(categoryId);
+    private AddressDetailDto mapToDto(AddressEntity addressEntity) {
+        AddressDetailDto dto = new AddressDetailDto();
+        dto.setId(addressEntity.getId());
+        dto.setCity(addressEntity.getCity());
 
-        CategoryDetailDTO categoryDetailDTO = categoryDatabase.get(categoryId);
-
-        if (! Strings.isEmpty(categoryRequestDTO.getName())) {
-            categoryDetailDTO.setName(categoryRequestDTO.getName());
-        }
-    }
-
-    private void validateCategoryExists(Long categoryId) {
-        if (! categoryDatabase.containsKey(categoryId)) {
-            throw new IllegalArgumentException("CategoryId: " + categoryId + " does not exists!");
-        }
-    }
-
-    public void deleteCategory(Long categoryId) {
-        categoryDatabase.remove(categoryId);
+        return dto;
     }
 }

@@ -1,9 +1,11 @@
 package sk.umb.example.library.category.persistence.entity;
 
 import jakarta.persistence.Entity;
+import sk.umb.example.library.address.persistence.entity.AddressEntity;
 
 @Entity(name = "category")
 public class CategoryEntity {
+    private AddressEntity address;
     private Long id;
     private String name;
 
@@ -18,5 +20,8 @@ public class CategoryEntity {
     }
     public void setName(String name){
         this.name = name;
+    }
+    public void setAddress(AddressEntity address) {
+        this.address = address;
     }
 }
