@@ -13,17 +13,9 @@ public class BookDetailDTO {
 
     private int count;
 
-    private Long categoryIds;
+    private CategoryDetailDTO categoryDetailDTO;
 
-    public AddressDetailDto getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressDetailDto address) {
-        this.address = address;
-    }
-
-    private AddressDetailDto address;
+    private Set<CategoryDetailDTO> categories;
 
     public Long getId() {
         return id;
@@ -73,11 +65,11 @@ public class BookDetailDTO {
         return count;
     }
 
-    public void setCategoryIds(Long categoryIds) {
-        this.categoryIds = categoryIds;
+    public Set<CategoryDetailDTO> getCategories() {
+        return categories;
     }
 
-    public Long getCategoryIds() {
-        return categoryIds;
+    public void setCategories(Set<CategoryDetailDTO> categories) {
+        this.categories = categories;
     }
 }

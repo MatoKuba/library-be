@@ -20,7 +20,6 @@ public class BookEntity {
 
     private int count;
 
-    private Long categoryIds;
 
     @ManyToMany
     private AddressEntity address;
@@ -86,12 +85,12 @@ public class BookEntity {
         return count;
     }
 
-    public void setCategoryIds(Long categoryIds) {
-        this.categoryIds = categoryIds;
+    public Set<CategoryEntity> getCategories() {
+        return categories;
     }
 
-    public Long getCategoryIds() {
-        return categoryIds;
+    public void setCategories(Set<CategoryEntity> categories) {
+        this.categories = categories;
     }
 
 }

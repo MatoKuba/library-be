@@ -16,21 +16,15 @@ import java.util.Optional;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
-    private final AddressRepository addressRepository;
 
-    public BookService(BookRepository bookRepository,
-                       AddressRepository addressRepository) {
+    public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        this.addressRepository = addressRepository;
     }
 
     public List<BookDetailDTO> getAllBooks() {
         return mapToDtoList(bookRepository.findAll());
     }
 
-    public List<BookDetailDTO> searchBookByAuthorLastName(String author) {
-        return mapToDtoList(bookRepository.findByAuthorLastName(author));
-    }
 
     public BookDetailDTO getBookById(Long bookId) {
         return mapToDto(getBookEntityById(bookId));
@@ -48,25 +42,8 @@ public class BookService {
     public void updateBook(Long bookId, BookRequestDTO bookRequestDTO) {
         BookEntity book = getBookEntityById(bookId);
 
-        if (! Strings.isEmpty(bookRequestDTO.getAuthorFirstName())) {
-            book.setAuthorFirstName(bookRequestDTO.getAuthorFirstName());
-        }
-
-        if (! Strings.isEmpty(bookRequestDTO.getAuthorLastName())) {
-            book.setAuthorLastName(bookRequestDTO.getAuthorLastName());
-        }
-
-        if (! Strings.isEmpty(bookRequestDTO.getTitle())) {
-            book.setTitle(bookRequestDTO.getTitle());
-        }
-        if (! Strings.isEmpty(bookRequestDTO.getIsbn())) {
-            book.setIsbn(bookRequestDTO.getIsbn());
-        }
-        if (bookRequestDTO.getCount() != 0) {
-            book.setCount(bookRequestDTO.getCount());
-        }
-
-        bookRepository.save(book);
+        BookEntity updateBookEntity = mapToEntity(bookRequestDTO);
+        BookDetailDTO updateDto = mapToDto(updateBookEntity);
     }
 
     @Transactional
@@ -87,13 +64,6 @@ public class BookService {
     private BookEntity mapToEntity(BookRequestDTO dto) {
         BookEntity book = new BookEntity();
 
-        if ( ! Objects.isNull(dto.getAddressId()) ) {
-            Optional<AddressEntity> address = addressRepository.findById(dto.getAddressId());
-
-            if (address.isPresent()) {
-                book.setAddress(address.get());
-            }
-        }
 
         book.setAuthorLastName(dto.getAuthorLastName());
         book.setAuthorFirstName(dto.getAuthorFirstName());
@@ -123,15 +93,18 @@ public class BookService {
         dto.setTitle(bookEntity.getTitle());
         dto.setIsbn(bookEntity.getIsbn());
         dto.setCount(bookEntity.getCount());
+        if (bookEntity.getCategories() != null) {
+            Set<CategoryDetailDTO> categoryDTOs = new HashSet<>();
+            for (CategoryEntity categoryEntity : bookEntity.getCategories()) {
+                CategoryDetailDTO categoryDTO = new CategoryDetailDTO();
+                categoryDTO.setId(categoryEntity.getId());
+                categoryDTO.setCategory(categoryEntity.getCategory());
+                categoryDTOs.add(categoryDTO);
+            }
+            dto.setCategories(categoryDTOs);
+        }
 
         return dto;
     }
 
-    private AddressDetailDto mapToDto(AddressEntity addressEntity) {
-        AddressDetailDto dto = new AddressDetailDto();
-        dto.setId(addressEntity.getId());
-        dto.setCity(addressEntity.getCity());
-
-        return dto;
-    }
 }

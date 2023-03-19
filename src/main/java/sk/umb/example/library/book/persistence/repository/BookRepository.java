@@ -6,5 +6,5 @@ import sk.umb.example.library.book.persistence.entity.BookEntity;
 
 @Repository
 public interface BookRepository extends CrudRepository<BookEntity, Long> {
-    Iterable<BookEntity> findByAuthorLastName(String authorName);
+
 }
